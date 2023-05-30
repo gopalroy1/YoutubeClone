@@ -1,0 +1,57 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.material-symbols-outlined{
+    font-size: 100px;
+}
+
+/* Stylling the nav bar  */
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  border: 2px solid red;
+  padding: 10px 0 10px 0;
+}
+.left-nav{
+    margin-left: 22px;
+}
+.left-nav span{
+    margin-right: 10px;
+}
+/* Main Content style form here  */
+.main-container {
+  display: flex;
+  border: 6px solid green;
+}
+/* Styling side menu  */
+
+.side-menu {
+  display: flex;
+  flex-direction: column;
+  width: 8vw;
+  gap: 10px;
+  border: 2px solid blue;
+}
+
+/* Styling quick search bar  */
+
+.quick-search{
+    border: 3px solid yellow;
+}
+
+/* Styling the main contents  */
+.video-card-container{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    border: 3px solid brown;
+    margin-left: 70px;
+    margin-top: 16px;
+    
+}
+
+/* Stylilng the video card  */
+.video-card{
+    border: 4px solid pink;
+}
