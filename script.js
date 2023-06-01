@@ -10,17 +10,16 @@ const apiKey = "AIzaSyC80C-0QQPo4kDe-b6MBk66rCv8wm73vok"; //from the good site
 // with this end point we are sending api key video id and a parameter called part which we got from the google console website 
 
 // Now calling and getting the data from the google url we created 
-const searchBar = document.getElementById("search2");
-console.log(searchBar.value,"8");
+const searchBar = document.getElementById("search-bar");
 const searchButton = document.getElementById("search-button");
 
 
 let mainContainer = document.getElementById("main-container");
-
-async function mainFun(val){
+searchButton.addEventListener("click",mainFun);
+async function mainFun(){
     console.log(searchBar.value);
     console.log("1");
-    
+    let val = searchBar.value;
     let list = await getResponse(val);
     
     
@@ -32,7 +31,7 @@ async function mainFun(val){
         for (let k of list) {
             // console.log(k.kind);
             //Creating elements of the video card
-            let title = document.createElement("h4")
+            let title = document.createElement("h5")
             let image = document.createElement("img")
             image.id="thumbnail"
             let channelName = document.createElement("p")
@@ -42,6 +41,13 @@ async function mainFun(val){
             //Setting values of the vidoes 
             title.innerText="inner text hai";
             // image.src= "https://images.unsplash.com/photo-1611162616475-46b635cb6868?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80";
+
+            let atag = document.createElement("a");
+            let id = k.id.videoId;
+            let link = `https://www.youtube.com/watch?v=${id}`
+            atag.href= link;
+            atag.target= "_blank";
+            atag.appendChild(image);
             image.src= k.snippet.thumbnails.high.url;
             title.innerHTML=k.snippet.title;
             channelName.innerText = "new name";
@@ -53,17 +59,18 @@ async function mainFun(val){
           
             let thumbnaildiv = document.createElement("div");
             thumbnaildiv.className="thumbnail-container";
-            thumbnaildiv.appendChild(image);
+            thumbnaildiv.appendChild(atag);
     //2nd
             let videoDesDiv = document.createElement("div");
             videoDesDiv.className="video-description";
     
             let channelIconDiv = document.createElement("div");
             channelIconDiv.className="channel-icon";
-            let iconSpan = document.createElement("span");
-           iconSpan.className="material-symbols-outlined";
-           iconSpan.innerText= "account_circle"
-           channelIconDiv.appendChild(iconSpan);
+            let iconDiv = document.createElement("div");
+            let imgAcc = document.createElement("img")
+            imgAcc.src="/img/account.png" 
+            iconDiv.appendChild(imgAcc);
+           channelIconDiv.appendChild(iconDiv);
     
            videoDesDiv.appendChild(channelIconDiv);
            videoDesDiv.appendChild(title);
@@ -123,9 +130,11 @@ async function getResponse(searchValue){
 
     // const endPoint = `https://youtube.googleapis.com/youtube/v3/search?part=${part}&maxResults=25&q=${q}&key=${apiKey}`
     // const response = await fetch(endPoint);
-    //Converting response
-    // const data = await response.json();
-    // console.log(data.items);
+    
+    // const data = await response.json(); 
+    // return data.items;
+
+
     const data = [
         {
             "kind": "youtube#searchResult",
@@ -966,15 +975,17 @@ async function getResponse(searchValue){
             }
         }
     ]
+    console.log(data);
+
     return data;
-    // return data.items;
     
-    // return data;
+    
+   
 
 
 };
 // getResponse("nature");
-searchButton.addEventListener("onclick",mainFun("nature"));
+
 
 
 
