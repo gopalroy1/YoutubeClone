@@ -1,7 +1,5 @@
 * {
   margin: 0;
-  margin-left: 3px;
-  margin-right: 3px;
   padding: 0;
 }
 .material-symbols-outlined{
@@ -97,7 +95,7 @@
 
 .video-card-container{
   display: flex;
-  gap: 7px;
+  /* gap: 7px; */
   flex-wrap: wrap;
   
   margin-top: 11px;
@@ -107,14 +105,14 @@
 /* Stylilng the video card  */
 .video-card{
     
-    width :304px;
-    padding: 5px 1px;
-    border-radius: 18px;
+    width :311px;
+   
+    border-radius: 12px;
 }
 #thumbnail{
   width: 97%;
-  border-radius: 18px;
-  margin-right: 20px;
+  border-radius: 12px;
+  
 }
 .video-description{
   display: flex;
