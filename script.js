@@ -27,9 +27,11 @@ async function CreateCatagory(){
     let jdata = await getTopCatogories();
     for (const k of jdata) {
         let CatagoryName = k.snippet.title;
+        let channelId = k.snippet.channelId
 
         //Now create buttons and add in dom
         let btn = document.createElement("button");
+       
         btn.innerText=CatagoryName;
         btn.className = "top-catagory"
         let searchDiv = document.getElementById("quick-search");
@@ -53,9 +55,7 @@ async function CreateCatagory(){
     let quickSearchBtn = document.querySelectorAll(".quick-search button");
    quickSearchBtn.forEach(el => {
     let txt3 = el.innerText;
-    console.log("text of button is "+txt3);
     el.addEventListener('click',function temp3(){
-        console.log("event added for "+txt3);
         searchVideoList(txt3);
     });
    });
@@ -64,13 +64,17 @@ async function CreateCatagory(){
 //Function to search videos and add them
 async function searchVideoList(val){
     mainContainer.innerHTML="";
-    // let val = searchBar.value;
     let list = await getResponse(val);
-    console.log("searching for"+val);
     // After getting the results adding to the video cards of the website 
         for (let k of list) {
+            //Getting values form the list which are requried
+            let channelId= k.snippet.channelDetais;
+
+            //Getting values from other API's
+            let channelDetails = await getChannelDetails(channelId);
+            console.log(channelDetails);
             //Creating elements of the video card
-            let title = document.createElement("h5")
+            let title = document.createElement("h5");
             let image = document.createElement("img")
             image.id="thumbnail"
             let channelName = document.createElement("p")
@@ -78,21 +82,41 @@ async function searchVideoList(val){
             let view = document.createElement("p")
     
             //Setting values of the vidoes 
-            title.innerText="inner text hai";
+            
+           
             //Anchor tag of video link
             let atag = document.createElement("a");
             let id = k.id.videoId;
-            let link = `https://www.youtube.com/watch?v=${id}`
+            let link = `https://www.youtube.com/watch?v=${id}`;
             atag.href= link;
             atag.target= "_blank";
             atag.appendChild(image);
+
+            //Getting likes and views of a video by id and setting  it
+            let viewC = await getVideoStats(id);
+            viewC= convertViewsFormat(viewC);
+            //Logic to convert view to you tube view format in k and M
+            view.innerText =  viewC;
+
+             //Creating anchor tag of the title which will point to video
+             let anchorTitle = document.createElement("a");
+             anchorTitle.className="title-anchor";
+             anchorTitle.href=link; //link same as thumbnail link
+             anchorTitle.target="_blank";
             //Image for thumbnail
             image.src= k.snippet.thumbnails.high.url;
-            title.innerHTML=k.snippet.title;
-            channelName.innerText = "new name";
-            duration.innerText = 5;
-            view.innerText = 6;
+            let s = k.snippet.title;
+            if(s.length>=74){
+                s= s.slice(0,71)+"...";
+            }
+            title.innerText=s;
+
+            //Creating channel name and logo
+            
+            // channelName.innerText = channelDetails[0];
+            // channelLogoLink = channelDetais[1];
             //
+            duration.innerText = 5;
             // Giving proper class name and then append it 
     //1st Div
           
@@ -108,11 +132,13 @@ async function searchVideoList(val){
             //This image and icon is for the channel name and logo
             let iconDiv = document.createElement("div");
             let imgAcc = document.createElement("img")
-            imgAcc.src="/img/account.png" 
+            imgAcc.src=channelLogoLink;
             iconDiv.appendChild(imgAcc);
            channelIconDiv.appendChild(iconDiv);
            videoDesDiv.appendChild(channelIconDiv);
-           videoDesDiv.appendChild(title);
+           //Title
+           anchorTitle.appendChild(title);
+           videoDesDiv.appendChild(anchorTitle);
     //3rd Div
            let channelNameDiv = document.createElement("div");
            channelNameDiv.appendChild(channelName);
@@ -1323,6 +1349,93 @@ async function getTopCatogories(){
     // ];
     // return temp;
 }
+
+async function getVideoStats(id){
+    // 'https://youtube.googleapis.com/youtube/v3/videos?part=statistics&id=xi9OwKXO6-s&key=[YOUR_API_KEY]
+    let url = `https://youtube.googleapis.com/youtube/v3/videos?part=statistics&id=${id}&key=${apiKey}`;
+
+    let data = await fetch(url);
+
+    // {
+    //     "kind": "youtube#videoListResponse",
+    //     "etag": "_9mAwJz_iRziS59C38GLUqYl_vU",
+    //     "items": [
+    //         {
+    //             "kind": "youtube#video",
+    //             "etag": "o0xEuMBwOSoDGacov_ufQa4_-28",
+    //             "id": "o1ZowO3C0To",
+    //             "statistics": {
+    //                 "viewCount": "27824",
+    //                 "likeCount": "3978",
+    //                 "favoriteCount": "0",
+    //                 "commentCount": "0"
+    //             }
+    //         }
+    //     ],
+    //     "pageInfo": {
+    //         "totalResults": 1,
+    //         "resultsPerPage": 1
+    //     }
+    // };
+    let jdata = await data.json();
+    let view = await jdata.items[0].statistics.viewCount;
+    return view ;
+}
+
+// Getting channel details like name and channel logo 
+async function getChannelDetails(id){
+   
+    let url =  `https://youtube.googleapis.com/youtube/v3/channels?part=snippet&id=${id}&key=${apiKey}`;
+    let data = await fetch(url);
+    let jdata = await data.json();
+
+    //Sample data from the API Call
+    // let title =  jdata.items[0].snippet.title;
+    // let titleUrl =  jdata.items[0].snippet.thumbnails.high.url;
+    // console.log(title, titleUrl);
+    console.log(jdata);
+    return jdata;
+   
+}
+
+
+//Utility functions 
+//For converting to you tube view format of millions and thousands
+function convertViewsFormat(viewC){
+    viewC += "";
+    if(viewC.length>=4 && viewC.length<=6){
+        viewC = parseInt(viewC)/1000;
+        viewC += "";
+        if(viewC.length>=3){
+            viewC=viewC.substring(0,3);
+        }
+        viewC+="K";
+    }
+    if(viewC.length>=7 && viewC.length<=9){
+        viewC = parseInt(viewC)/1000000;
+        viewC += "";
+        if(viewC.length>=3){
+            viewC=viewC.substring(0,3);
+        }
+        viewC+="M"
+    }
+    if(viewC.length>=10 && viewC.length<=12)
+    {
+        viewC = parseInt(viewC)/1000000000;
+        viewC += "";
+        if(viewC.length>=3){
+            viewC=viewC.substring(0,3);
+        }
+        viewC+="B";
+    }
+    else{
+        viewC = viewC;
+    }
+    return viewC;
+}
+
+// console.log(getChannelDetails("UC_x5XG1OV2P6uZZ5FSM9Ttw"));
+
 
 
 
