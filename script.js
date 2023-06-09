@@ -61,26 +61,55 @@ async function CreateCatagory() {
 async function searchVideoList(val) {
     //Empty main Container for a new search
   mainContainer.innerHTML = "";
-  let list = await getResponse(val);
+  const q = val;
+  const part = "snippet";
 
+  const endPoint = `https://youtube.googleapis.com/youtube/v3/search?part=${part}&maxResults=25&q=${q}&key=${apiKey}`;
+  const response = await fetch(endPoint);
+  const data = await response.json();
+  console.log(data);
+  let list = data.items;
   //looping in data extracting relevent data and creating videos
   for (let k of list) {
     //Getting values form the list which are requried
-    let channelId = k.snippet.channelDetais;
+    let channelId = k.snippet.channelId;
     let videoId = k.id.videoId;
     let linkVideo = `https://www.youtube.com/watch?v=${videoId}`;
     let imageLink = k.snippet.thumbnails.high.url;
     let innerTextTitle = k.snippet.title;
 
+    //Creating date for showing in the video
+    let objDate = k.snippet.publishedAt;
+    const date = new Date(objDate);
+    let videoDate = findVideoYear(date);
+
     //Getting values from other API's
         //Channel detail api
-    let channelDetails =  getChannelDetails(channelId);
-    channelDetails.then(console.log(8));
-    // console.log(typeof(channelDetails) );
-    //get channel logo and title
+        let channelDetails ;
+        try {
+          let urlChannel = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet&id=${channelId}&key=${apiKey}`;
+        let dataChannel = await fetch(urlChannel);
+        let jdataChannel = await dataChannel.json();
+         channelDetails = jdataChannel.items;
+        } catch (error) {
+          console.log(error);
+        }
 
-        //Views detals api
-    let viewC = await getVideoStats(videoId);
+        //Views detals api total view
+        let urlView = `https://youtube.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${apiKey}`;
+        let viewC =0;
+        try {
+          let dataView = await fetch(urlView);
+        let jdataView = await dataView.json();
+        viewC = await jdataView.items[0].statistics.viewCount;
+        } catch (error) {
+          console.log(error);
+          viewC = 11+"K";
+        }
+        
+        
+        
+    // viewC = 11;
     viewC = convertViewsFormat(viewC);
     
     
@@ -114,7 +143,7 @@ async function searchVideoList(val) {
     //This image and icon is for the channel name and logo
     let iconDiv = document.createElement("div");
     let imgAcc = document.createElement("img");
-    // imgAcc.src=channelLogoLink;
+    imgAcc.src=channelDetails[0].snippet.thumbnails.high.url;
     iconDiv.appendChild(imgAcc);
     channelIconDiv.appendChild(iconDiv);
     videoDesDiv.appendChild(channelIconDiv);
@@ -123,27 +152,28 @@ async function searchVideoList(val) {
     videoDesDiv.appendChild(anchorTitle);
 //3rd Div
     let channelName = document.createElement("p");
-    channelName.innerText="api use hoga isme";
+    channelName.innerText=channelDetails[0].snippet.title;
     let channelNameDiv = document.createElement("div");
+    channelNameDiv.className="channel-name"
     channelNameDiv.appendChild(channelName);
 //4th div set
 
-    let duration = document.createElement("p");
-    duration.innerText = 5; 
+    let time = document.createElement("p");
+    time.innerText = videoDate; 
     let view = document.createElement("p");
     view.innerText = viewC;
     
     let durDiv = document.createElement("div");
     durDiv.className = "dur";
 
-    let durDivPara = document.createElement("div");
-    durDivPara.appendChild(duration);
+    let durDivTime = document.createElement("div");
+    durDivTime.appendChild(time);
 
     let durDivView = document.createElement("div");
     durDivView.appendChild(view);
 
-    durDiv.appendChild(durDivPara);
     durDiv.appendChild(durDivView);
+    durDiv.appendChild(durDivTime);
 
     //Apeending all
     //Main div
@@ -157,8 +187,7 @@ async function searchVideoList(val) {
     mainContainer.appendChild(videodiv);
   }
 }
-              // These function will get the response of  api and return it
-//This will get the list of videos from google api
+//This will get the list of 25 videos from google api
 async function getResponse(searchValue) {
   // Getting response
   const q = searchValue;
@@ -184,43 +213,15 @@ async function getTopCatogories() {
 
 }
 
+//Getting video view and likes 
 async function getVideoStats(id) {
-  let url = `https://youtube.googleapis.com/youtube/v3/videos?part=statistics&id=${id}&key=${apiKey}`;
-
-  let data = await fetch(url);
-
-  // {
-  //     "kind": "youtube#videoListResponse",
-  //     "etag": "_9mAwJz_iRziS59C38GLUqYl_vU",
-  //     "items": [
-  //         {
-  //             "kind": "youtube#video",
-  //             "etag": "o0xEuMBwOSoDGacov_ufQa4_-28",
-  //             "id": "o1ZowO3C0To",
-  //             "statistics": {
-  //                 "viewCount": "27824",
-  //                 "likeCount": "3978",
-  //                 "favoriteCount": "0",
-  //                 "commentCount": "0"
-  //             }
-  //         }
-  //     ],
-  //     "pageInfo": {
-  //         "totalResults": 1,
-  //         "resultsPerPage": 1
-  //     }
-  // };
-  let jdata = await data.json();
-  let view =  await jdata.items[0].statistics.viewCount;
+ 
   return view;
 }
 
 // Getting channel details like name and channel logo
 async function getChannelDetails(id) {
-  let url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet&id=${id}&key=${apiKey}`;
-  let data = await fetch(url);
-  let jdata = await data.json();
-  return jdata.items;
+
 }
 
 //Utility functions
@@ -254,5 +255,33 @@ function convertViewsFormat(viewC) {
     viewC = viewC;
   }
   return viewC;
+}
+function findVideoYear(date){
+  let curr = Date.now();
+  let past = date
+  let val = curr -past;
+  val = val/(1000*60*60*24*30*12);
+  if(val>=1){
+    val = Math.floor(val);
+    return `${val}years ago`;
+  }
+  val = val*12
+  if(val>=1){
+    val = Math.floor(val);
+    return `${val} month ago`;
+  }
+  val = val*30;
+  if(val>=1){
+    val = Math.floor(val);
+    return `${val} days ago`;
+  }
+  val = val*24;
+  if(val>= 1){
+    val =Math.floor(val)
+    return `${val} hours ago`
+  }
+  else{
+    return `just now `;
+  }
 }
 

@@ -12,16 +12,12 @@
   cursor: pointer;
 }
 
-.material-symbols-outlined {
-  font-size: 100px;
-}
 
 /* Stylling the nav bar  */
 .nav-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   margin: 12px 0;
   /* border: 2px solid rebeccapurple; */
 }
@@ -139,7 +135,6 @@
   display: flex;
   gap: 7px;
   flex-wrap: wrap;
-
   margin-top: 11px;
 }
 
@@ -147,12 +142,16 @@
 .video-card {
   width: 310px;
   border-radius: 12px;
-  border: 2px solid red;
+  
+}
+.channel-icon img {
+  width: 40px;
+  border-radius: 50%;
 }
 #thumbnail {
   width: 100%;
-  height: 195px;
-  border-radius: 12px;
+  height: 190px;
+  border-radius: 16px;
 }
 .title-anchor{
   text-decoration: none;
@@ -162,8 +161,28 @@
   display: flex;
   margin-top: 6px;
   gap: 4px;
+  align-items: center;
+}
+#title-video{
+  font-weight: bolder;
+
+}
+.channel-name p, .dur p{
+  font-size: 14px;
+  color: #727372;
 }
 .dur {
   display: flex;
-  justify-content: space-between;
+  gap: 16px;
+  margin-left: 40px;
+}
+.channel-name{
+  margin-left: 40px;
+}
+
+#thumbnail:hover{
+  border-radius: 0px;
+  transition-timing-function: ease-in;
+  transition-duration: 200ms;
+  transform: scale(1.01);
 }
