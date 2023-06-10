@@ -74,7 +74,7 @@ async function searchVideoList(val) {
     let channelId = k.snippet.channelId;
     let videoId = k.id.videoId;
     let linkVideo = `https://www.youtube.com/watch?v=${videoId}`;
-    let imageLink = k.snippet.thumbnails.high.url;
+    let imageLink = k.snippet.thumbnails.medium.url;
     let innerTextTitle = k.snippet.title;
 
     //Creating date for showing in the video
