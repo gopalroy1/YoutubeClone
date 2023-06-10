@@ -133,9 +133,10 @@
 
 .video-card-container {
   display: flex;
-  gap: 7px;
   flex-wrap: wrap;
-  margin-top: 11px;
+  margin-top: 20px;
+  column-gap: 13px;
+  row-gap: 23px;
 }
 
 /* Stylilng the video card  */
@@ -152,6 +153,18 @@
   width: 100%;
   height: 190px;
   border-radius: 16px;
+}
+#video-time{
+  float: right;
+  position: relative;
+  bottom: 31px;
+  right: 4px;
+  color: white;
+  background-color: black;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 4px;
 }
 .title-anchor{
   text-decoration: none;
@@ -170,6 +183,8 @@
 .channel-name p, .dur p{
   font-size: 14px;
   color: #727372;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
 }
 .dur {
   display: flex;
@@ -178,6 +193,7 @@
 }
 .channel-name{
   margin-left: 40px;
+  
 }
 
 #thumbnail:hover{

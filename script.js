@@ -67,7 +67,6 @@ async function searchVideoList(val) {
   const endPoint = `https://youtube.googleapis.com/youtube/v3/search?part=${part}&maxResults=25&q=${q}&key=${apiKey}`;
   const response = await fetch(endPoint);
   const data = await response.json();
-  console.log(data);
   let list = data.items;
   //looping in data extracting relevent data and creating videos
   for (let k of list) {
@@ -95,13 +94,16 @@ async function searchVideoList(val) {
           console.log(error);
         }
 
-        //Views detals api total view
-        let urlView = `https://youtube.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${apiKey}`;
+        //Views detals api total view and video duration
+        let part = "snippet,contentDetails,statistics";
+        let urlView = `https://youtube.googleapis.com/youtube/v3/videos?part=${part}&id=${videoId}&key=${apiKey}`;
         let viewC =0;
+        let videoTime="";
         try {
           let dataView = await fetch(urlView);
         let jdataView = await dataView.json();
         viewC = await jdataView.items[0].statistics.viewCount;
+         videoTime = jdataView.items[0].contentDetails.duration;
         } catch (error) {
           console.log(error);
           viewC = 11+"K";
@@ -111,6 +113,7 @@ async function searchVideoList(val) {
         
     // viewC = 11;
     viewC = convertViewsFormat(viewC);
+    videoTime=convertToTimeProperly(videoTime);
     
     
 //1st Div
@@ -120,7 +123,12 @@ async function searchVideoList(val) {
     let atag = document.createElement("a");
     atag.href = linkVideo;
     atag.target = "_blank";
+    //Adding video time parameter
+    let videoTimePara = document.createElement("span");
+    videoTimePara.innerText=videoTime;
+    videoTimePara.id="video-time";
     atag.appendChild(image);
+    atag.appendChild(videoTimePara);
     let thumbnaildiv = document.createElement("div");
     thumbnaildiv.className = "thumbnail-container";
     thumbnaildiv.appendChild(atag);
@@ -283,5 +291,39 @@ function findVideoYear(date){
   else{
     return `just now `;
   }
+}
+function convertToTimeProperly(time){
+  let ans ="";
+  let temp ="";
+  for (let i = 2; i < time.length; i++) {
+    
+    if(time.charAt(i)=='H' || time.charAt(i)=='S' || time.charAt(i)=='M'){
+      
+      if(time.charAt(i)!= 'S'){
+        ans+=temp+":";
+      }
+      else{
+        if(temp.length<2){
+          ans+="0"+temp;
+        }
+        else
+        ans+=temp;
+      }
+      temp="";
+    }
+    else{
+      temp+=time.charAt(i);
+    }
+    
+    
+  }
+  
+  if(time.length<=4){
+    ans = ans+"00:00";
+  }
+  if(ans.length==0){
+    ans = "Live";
+  }
+  return ans;
 }
 
