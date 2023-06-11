@@ -16,11 +16,17 @@
 /* Stylling the nav bar  */
 .nav-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 12px 0;
-  /* border: 2px solid rebeccapurple; */
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    background-color: white;
+    z-index: 1;
+    padding: 10px 0px;
 }
+
 .left-nav {
   display: flex;
   gap: 15px;
@@ -79,6 +85,7 @@
 /* Main Content style form here  */
 .main-container {
   display: flex;
+  margin-top: 65px;
 }
 /* Styling side menu  */
 
@@ -93,7 +100,7 @@
 }
 .side-menu-items {
   display: flex;
-  gap: 13px;
+  gap: 24px;
   padding: 0px 24px;
   height: 30px;
   align-items: center;
@@ -201,4 +208,17 @@
   transition-timing-function: ease-in;
   transition-duration: 200ms;
   transform: scale(1.01);
+}
+.footerDetails{
+  font-weight: bold;
+  font-size: 12px ;
+  margin: 12px 0px;
+}
+.footerDetails p{
+  display: inline;
+  margin-right: 10px;
+}
+.copy{
+  color: #727372;
+  font-family: 'Nunito', sans-serif;
 }

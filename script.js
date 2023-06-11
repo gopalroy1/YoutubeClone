@@ -206,10 +206,6 @@ async function getResponse(searchValue) {
 
   const data = await response.json();
   return data.items;
-
-
-  console.log(data);
-  return data;
 }
 
 // Getting the list of top video categories and returning them
@@ -221,16 +217,6 @@ async function getTopCatogories() {
 
 }
 
-//Getting video view and likes 
-async function getVideoStats(id) {
- 
-  return view;
-}
-
-// Getting channel details like name and channel logo
-async function getChannelDetails(id) {
-
-}
 
 //Utility functions
 //For converting to you tube view format of millions and thousands
@@ -326,4 +312,7 @@ function convertToTimeProperly(time){
   }
   return ans;
 }
+
+searchVideoList("Trailers HD");
+
 
