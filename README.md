@@ -21,7 +21,7 @@ This Website is made with the help of google data API, user can search any video
 <hr>
 
 ### ScreenShots
-Add screenshots of various devices here window mobile.
+Add screenshots of various devices here window mobile
 
 # Pending
 responsive
