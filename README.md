@@ -26,8 +26,5 @@ Laptop View![Screenshot (32)](https://github.com/gopalroy1/YoutubeClone/assets/1
 
 Mobile view![WhatsApp Image 2023-07-03 at 2 13 57 PM](https://github.com/gopalroy1/YoutubeClone/assets/105766337/135f9026-aee7-4dea-8b4e-ad1c089b9f2c)
 
-# Pending
-responsive
-side bar fix with proper scrolling 
-custom video page which will show  proper comments and video likes etc.
+
 
