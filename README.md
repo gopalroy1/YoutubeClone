@@ -21,7 +21,8 @@ This Website is made with the help of google data API, user can search any video
 <hr>
 
 ### ScreenShots
-Add screenshots of various devices here window mobile
+Laptop View![Screenshot (32)](https://github.com/gopalroy1/YoutubeClone/assets/105766337/6a49b413-0855-40e2-8f0f-e3f27ddf4224)
+d screenshots of various devices here window mobile
 
 # Pending
 responsive
