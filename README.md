@@ -1,5 +1,6 @@
 # YouTube Clone Application
 This is a YouTube clone website.  
+Live site here - https://gopalroy1.github.io/YoutubeClone/
 <hr>
 
 ## Description
@@ -22,8 +23,8 @@ This Website is made with the help of google data API, user can search any video
 
 ### ScreenShots
 Laptop View![Screenshot (32)](https://github.com/gopalroy1/YoutubeClone/assets/105766337/6a49b413-0855-40e2-8f0f-e3f27ddf4224)
-Mobile view
-![WhatsApp Image 2023-07-03 at 2 13 57 PM](https://github.com/gopalroy1/YoutubeClone/assets/105766337/135f9026-aee7-4dea-8b4e-ad1c089b9f2c)
+
+Mobile view![WhatsApp Image 2023-07-03 at 2 13 57 PM](https://github.com/gopalroy1/YoutubeClone/assets/105766337/135f9026-aee7-4dea-8b4e-ad1c089b9f2c)
 
 # Pending
 responsive
